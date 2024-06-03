@@ -42,8 +42,21 @@ public class Author {
         }
         return authors;
     }
+    public static void printAuthorById(Scanner sc) {
+        System.out.println("Enter the id of the author.");
+        long id = ValidateInput.longVal(sc);
+        sc.nextLine();
+
+        Author author = findById(id);
+        if (author!= null) {
+            System.out.println("Author with id " + id + ": " + author.getName() + " " + author.getSurname());
+        } else {
+            System.out.println("No author found with id: " + id);
+        }
+    }
 
     public static Author findById(long id) {
+
 
         String query = "SELECT * FROM authors where id = ?" ;
         Author aut = null;
@@ -63,19 +76,23 @@ public class Author {
         }
         return aut;
     }
-    public static void create(Scanner sc) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter author name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter author surname: ");
-        String surname = scanner.nextLine();
+    public static void addAuthor(Scanner sc) {
+        Author author = new Author();
+        System.out.println("Enter author name.");
+        author.setName(sc.nextLine());
+        System.out.println("Enter author surname.");
+        author.setSurname(sc.nextLine());
+        create(author);
+        System.out.println("Author was added to the list.");
+    }
+    public static void create(Author author) {
 
         String query = "INSERT INTO `authors`(`name`, `surname`) VALUES (?, ?)" ;
         try {
             Connection con = Main.connect();
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setString(1,name);
-            pst.setString(2,surname);
+            pst.setString(1,author.getName());
+            pst.setString(2,author.getSurname());
             pst.executeUpdate();
             con.close();
             pst.close();
@@ -83,6 +100,21 @@ public class Author {
             System.out.println("Failed to ad author to the list!");
         }
     }
+
+//    public static void removeAuthor(Scanner sc) {
+//
+//        System.out.println("Enter the id of the author you wish to remove.");
+//        long oldId = ValidateInput.longVal(sc);
+//        sc.nextLine();
+//        for (int i = 0; i < authorList.size(); i++) {
+//            Author author = authorList.get(i);
+//            if (author.getId() == oldId) {
+//                authorList.remove(i);
+//                System.out.println("The author with id " + oldId + " was removed.");
+//            }
+//        }
+//        System.out.println("There is no such author with in the list.");
+//    }
 
     public static void delete(long id) {
         String query = "DELETE FROM `authors` WHERE id = ?" ;
@@ -138,6 +170,7 @@ public class Author {
         this.surname = surname;
     }
 
+
     public static int intInput(Scanner sc) {
         while (true) {
             try {
@@ -145,6 +178,18 @@ public class Author {
             } catch (Exception e) {
                 System.out.println("Plese enter a digit");
                 sc.nextLine();
+            }
+        }
+    }
+    public class ValidateInput {
+        public static long longVal(Scanner sc) {
+            while (true) {
+                try {
+                    return sc.nextLong();
+                } catch (Exception e) {
+                    System.out.println("Please enter a valid long value.");
+                    sc.next();
+                }
             }
         }
     }

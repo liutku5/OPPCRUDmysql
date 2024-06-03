@@ -21,10 +21,10 @@ public class Main {
                         System.out.println(Author.selectAll());
                         break;
                     case 2:
-
+                        Author.printAuthorById(sc);
                         break;
                     case 3:
-                        Author.create(sc);
+                        Author.addAuthor(sc);
                         break;
                     case 4:
 
