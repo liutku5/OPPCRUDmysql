@@ -42,13 +42,14 @@ public class Author {
         }
         return authors;
     }
+
     public static void printAuthorById(Scanner sc) {
         System.out.println("Enter the id of the author.");
         long id = ValidateInput.longVal(sc);
         sc.nextLine();
 
         Author author = findById(id);
-        if (author!= null) {
+        if (author != null) {
             System.out.println("Author with id " + id + ": " + author.getName() + " " + author.getSurname());
         } else {
             System.out.println("No author found with id: " + id);
@@ -57,13 +58,12 @@ public class Author {
 
     public static Author findById(long id) {
 
-
-        String query = "SELECT * FROM authors where id = ?" ;
+        String query = "SELECT * FROM authors where id = ?";
         Author aut = null;
         try {
             Connection con = Main.connect();
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setLong(1,id);
+            pst.setLong(1, id);
             ResultSet rs = pst.executeQuery();
             while ((rs.next())) {
                 aut = new Author(rs.getLong("id"), rs.getString("name"), rs.getString("surname"));
@@ -76,6 +76,7 @@ public class Author {
         }
         return aut;
     }
+
     public static void addAuthor(Scanner sc) {
         Author author = new Author();
         System.out.println("Enter author name.");
@@ -85,14 +86,15 @@ public class Author {
         create(author);
         System.out.println("Author was added to the list.");
     }
+
     public static void create(Author author) {
 
-        String query = "INSERT INTO `authors`(`name`, `surname`) VALUES (?, ?)" ;
+        String query = "INSERT INTO `authors`(`name`, `surname`) VALUES (?, ?)";
         try {
             Connection con = Main.connect();
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setString(1,author.getName());
-            pst.setString(2,author.getSurname());
+            pst.setString(1, author.getName());
+            pst.setString(2, author.getSurname());
             pst.executeUpdate();
             con.close();
             pst.close();
@@ -101,27 +103,26 @@ public class Author {
         }
     }
 
-//    public static void removeAuthor(Scanner sc) {
-//
-//        System.out.println("Enter the id of the author you wish to remove.");
-//        long oldId = ValidateInput.longVal(sc);
-//        sc.nextLine();
-//        for (int i = 0; i < authorList.size(); i++) {
-//            Author author = authorList.get(i);
-//            if (author.getId() == oldId) {
-//                authorList.remove(i);
-//                System.out.println("The author with id " + oldId + " was removed.");
-//            }
-//        }
-//        System.out.println("There is no such author with in the list.");
-//    }
+
+    public static void removeAuthor(Scanner sc) {
+        System.out.println("Enter the id of the author you wish to remove.");
+        long id = ValidateInput.longVal(sc);
+        sc.nextLine();
+        Author author = findById(id);
+        if (author != null) {
+            delete(id);
+            System.out.println("The author with id " + id + " was removed.");
+        } else {
+            System.out.println("No author found with id: " + id);
+        }
+    }
 
     public static void delete(long id) {
-        String query = "DELETE FROM `authors` WHERE id = ?" ;
+        String query = "DELETE FROM `authors` WHERE id = ?";
         try {
             Connection con = Main.connect();
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setLong(1,id);
+            pst.setLong(1, id);
             pst.executeUpdate();
             con.close();
             pst.close();
@@ -129,20 +130,44 @@ public class Author {
             System.out.println("Failed to retrieve author!");
         }
     }
-    public  void update() {
-        String query = "UPDATE `authors` SET `name`= ? ,`surname`= ? WHERE id = ?" ;
+
+    public static void changeAuthorInfo(Scanner sc) {
+        System.out.println("Enter the id of the author info you wish to change.");
+        long id = ValidateInput.longVal(sc);
+        sc.nextLine();
+        Author author = findById(id);
+        if (author != null) {
+            System.out.println("Enter new author name.");
+            String name = sc.nextLine();
+            System.out.println("Enter new author surname.");
+            String surname = sc.nextLine();
+            author = update(id, name, surname);
+            if (author != null) {
+                System.out.println("The author was changed successfully.");
+            } else {
+                System.out.println("Failed to update author!");
+            }
+        } else {
+            System.out.println("No author found with id: " + id);
+        }
+    }
+    public static Author update(long id, String name, String surname) {
+        String query = "UPDATE `authors` SET `name`= ? ,`surname`= ? WHERE id = ?";
+        Author author = null;
         try {
             Connection con = Main.connect();
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setString(1,this.name);
-            pst.setString(2,this.surname);
-            pst.setLong(3,this.id);
+            pst.setString(1, name);
+            pst.setString(2, surname);
+            pst.setLong(3, id);
             pst.executeUpdate();
             con.close();
             pst.close();
+            author = findById(id);
         } catch (Exception e) {
             System.out.println("Failed to update authors!");
         }
+        return author;
     }
 
     public long getId() {
@@ -181,6 +206,7 @@ public class Author {
             }
         }
     }
+
     public class ValidateInput {
         public static long longVal(Scanner sc) {
             while (true) {
@@ -193,11 +219,12 @@ public class Author {
             }
         }
     }
+
     @Override
     public String toString() {
         return "Author: " +
                 "id: " + id +
-                ", name: " + name  +
+                ", name: " + name +
                 ", surname: " + surname;
     }
 }

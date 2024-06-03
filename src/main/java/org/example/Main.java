@@ -27,10 +27,10 @@ public class Main {
                         Author.addAuthor(sc);
                         break;
                     case 4:
-
+                        Author.changeAuthorInfo(sc);
                         break;
                     case 5:
-
+                        Author.removeAuthor(sc);
                     case 6:
                         System.exit(1);
                 }
