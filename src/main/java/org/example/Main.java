@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.models.Author;
+import org.example.models.Book;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -32,6 +33,16 @@ public class Main {
                     case 5:
                         Author.removeAuthor(sc);
                     case 6:
+                        printInfoMessege2();
+                        int book = Book.intInput(sc);
+                        sc.nextLine();
+                        switch (book){
+                            case 1:
+                            Book.printBook();
+                            case 2:
+
+                        }
+                    case 7:
                         System.exit(1);
                 }
                 break;
@@ -44,11 +55,24 @@ public class Main {
             System.out.println("1. Show author list.");
             System.out.println("2. Choose author from the list by id.");
             System.out.println("3. Add author to the list.");
-            System.out.println("4. Edit author information");
-            System.out.println("5. Remove author from the list");
-            System.out.println("6. Close program");
+            System.out.println("4. Edit author information.");
+            System.out.println("5. Remove author from the list.");
+            System.out.println("6. Enter book menu.");
+            System.out.println("7. Close program.");
             System.out.println("--------------------------");
             System.out.println();
+    }
+    public static void printInfoMessege2 () {
+        System.out.println();
+        System.out.println("--------------------------");
+        System.out.println("1. Show book list.");
+        System.out.println("2. Choose book from the list by id.");
+        System.out.println("3. Add book to the list.");
+        System.out.println("4. Edit book information");
+        System.out.println("5. Remove book from the list");
+        System.out.println("6. Close program");
+        System.out.println("--------------------------");
+        System.out.println();
     }
 
     public static Connection connect() {

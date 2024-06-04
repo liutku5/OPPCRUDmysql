@@ -23,9 +23,7 @@ public class Author {
         this.surname = surname;
     }
     public static void printAuthor() {
-
         for (Author author : selectAll()) {
-
             System.out.print(author);
             System.out.println();
         }
@@ -150,11 +148,7 @@ public class Author {
             System.out.println("Enter new author surname.");
             author.setSurname(sc.nextLine());
             author.update();
-            if (author != null) {
-                System.out.println("The author was changed successfully.");
-            } else {
-                System.out.println("Failed to update author!");
-            }
+            System.out.println("The author was changed successfully.");
         } else {
             System.out.println("No author found with id: " + id);
         }
