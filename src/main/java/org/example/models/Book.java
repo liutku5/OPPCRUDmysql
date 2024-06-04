@@ -96,6 +96,57 @@ public class Book {
         String genre = sc.nextLine();
         Long author_id = null;
         while (true) {
+            Author.printAuthor();
+            System.out.println();
+            System.out.println("Select author id from the list.");
+            author_id = sc.nextLong();
+            boolean hasAuthor = false;
+            for (Author author : Author.selectAll()) {
+                if (author.getId() == author_id) {
+                    hasAuthor = true;
+                    break;
+                }
+            }
+            if (!hasAuthor) {
+                System.out.println("Author not found. Please try again.");
+                System.out.println();
+            } else {
+                book.createBook(title, genre, author_id);
+                System.out.println("Book was added to the list.");
+                return;
+            }
+        }
+
+    }
+
+    public static void createBook(String title, String genre, Long author_id) {
+
+        String query = "INSERT INTO `books`(`title`, `genre`, `author_id`) VALUES (?, ?, ?)";
+        try {
+            Connection con = Main.connect();
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, title);
+            pst.setString(2, genre);
+            pst.setLong(3, author_id);
+            pst.executeUpdate();
+            con.close();
+            pst.close();
+        } catch (Exception e) {
+            System.out.println("Failed to ad book to the list!");
+        }
+    }
+
+    public static void changeBookInfo(Scanner sc) {
+        System.out.println("Enter the id of the book info you wish to change.");
+        long id = Book.ValidateInput.longVal(sc);
+        sc.nextLine();
+        Book book = findBookById(id);
+        if (book != null) {
+            System.out.println("Enter new book title.");
+            book.setTitle(sc.nextLine());
+            System.out.println("Enter new book genre.");
+            book.setGenre(sc.nextLine());
+            Long author_id = null;
             while (true) {
                 Author.printAuthor();
                 System.out.println();
@@ -112,115 +163,120 @@ public class Book {
                     System.out.println("Author not found. Please try again.");
                     System.out.println();
                 } else {
-                    book.createBook(title, genre, author_id);
-                    System.out.println("Book was added to the list.");
+                    book.setAuthor_id(author_id);
+                    book.update();
+                    System.out.println("The book was changed successfully.");
                     return;
                 }
             }
+        } else {
+            System.out.println("No book found with id: " + id);
         }
     }
-        public static void createBook (String title, String genre, Long author_id){
 
-            String query = "INSERT INTO `books`(`title`, `genre`, `author_id`) VALUES (?, ?, ?)";
+    public void update() {
+        String query = "UPDATE `books` SET `title`= ? ,`genre`= ? ,`author_id`= ? WHERE id = ?";
+        try {
+            Connection con = Main.connect();
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, this.title);
+            pst.setString(2, this.genre);
+            pst.setLong(3, this.author_id);
+            pst.setLong(4, this.id);
+            pst.executeUpdate();
+            con.close();
+            pst.close();
+        } catch (Exception e) {
+            System.out.println("Failed to update book!");
+        }
+    }
+
+    public static void removeBook(Scanner sc) {
+        System.out.println("Enter the id of the Book you wish to remove.");
+        long id = Book.ValidateInput.longVal(sc);
+        sc.nextLine();
+        Book book = findBookById(id);
+        if (book != null) {
+            delete(id);
+            System.out.println("The book with id " + id + " was removed.");
+        } else {
+            System.out.println("No book found with id: " + id);
+        }
+    }
+
+    public static void delete(long id) {
+        String query = "DELETE FROM `books` WHERE id = ?";
+        try {
+            Connection con = Main.connect();
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setLong(1, id);
+            pst.executeUpdate();
+            con.close();
+            pst.close();
+        } catch (Exception e) {
+            System.out.println("Failed to delete book!");
+        }
+    }
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public long getAuthor_id() {
+        return author_id;
+    }
+
+    public void setAuthor_id(long author_id) {
+        this.author_id = author_id;
+    }
+
+    public static int intInput(Scanner sc) {
+        while (true) {
             try {
-                Connection con = Main.connect();
-                PreparedStatement pst = con.prepareStatement(query);
-                pst.setString(1, title);
-                pst.setString(2, genre);
-                pst.setLong(3, author_id);
-                pst.executeUpdate();
-                con.close();
-                pst.close();
+                return sc.nextInt();
             } catch (Exception e) {
-                System.out.println("Failed to ad book to the list!");
+                System.out.println("Plese enter a digit");
+                sc.nextLine();
             }
         }
+    }
 
-        public static void removeBook (Scanner sc){
-            System.out.println("Enter the id of the Book you wish to remove.");
-            long id = Book.ValidateInput.longVal(sc);
-            sc.nextLine();
-            Book book = findBookById(id);
-            if (book != null) {
-                delete(id);
-                System.out.println("The book with id " + id + " was removed.");
-            } else {
-                System.out.println("No book found with id: " + id);
-            }
-        }
-
-        public static void delete ( long id){
-            String query = "DELETE FROM `books` WHERE id = ?";
-            try {
-                Connection con = Main.connect();
-                PreparedStatement pst = con.prepareStatement(query);
-                pst.setLong(1, id);
-                pst.executeUpdate();
-                con.close();
-                pst.close();
-            } catch (Exception e) {
-                System.out.println("Failed to delete book!");
-            }
-        }
-
-
-        public long getId () {
-            return id;
-        }
-
-        public void setId ( long id){
-            this.id = id;
-        }
-
-        public String getTitle () {
-            return title;
-        }
-
-        public void setTitle (String title){
-            this.title = title;
-        }
-        public String getGenre () {
-            return genre;
-        }
-
-        public void setGenre (String genre){
-            this.genre = genre;
-        }
-
-        public long getAuthor_id () {
-            return author_id;
-        }
-
-        public void setAuthor_id ( long author_id){
-            this.author_id = author_id;
-        }
-
-        public static int intInput (Scanner sc){
+    public class ValidateInput {
+        public static long longVal(Scanner sc) {
             while (true) {
                 try {
-                    return sc.nextInt();
+                    return sc.nextLong();
                 } catch (Exception e) {
-                    System.out.println("Plese enter a digit");
-                    sc.nextLine();
+                    System.out.println("Please enter a valid long value.");
+                    sc.next();
                 }
             }
-        }
-
-        public class ValidateInput {
-            public static long longVal(Scanner sc) {
-                while (true) {
-                    try {
-                        return sc.nextLong();
-                    } catch (Exception e) {
-                        System.out.println("Please enter a valid long value.");
-                        sc.next();
-                    }
-                }
-            }
-        }
-
-        @Override
-        public String toString () {
-            return id + "." + " Title: " + title + " Genre: " + genre + " Author id: " + author_id + ";";
         }
     }
+
+    @Override
+    public String toString() {
+        return id + "." + " Title: " + title + " Genre: " + genre + " Author id: " + author_id + ";";
+    }
+}

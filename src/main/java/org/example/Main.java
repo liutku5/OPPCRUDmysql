@@ -75,7 +75,7 @@ public class Main {
                     Book.addBook(sc);
                     break;
                 case 4:
-
+                    Book.changeBookInfo(sc);
                     break;
                 case 5:
                     Book.removeBook(sc);
