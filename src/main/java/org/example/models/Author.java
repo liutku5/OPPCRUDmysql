@@ -52,7 +52,6 @@ public class Author {
         System.out.println("Enter the id of the author.");
         long id = ValidateInput.longVal(sc);
         sc.nextLine();
-
         Author author = findById(id);
         if (author != null) {
             System.out.println("Author with id " + id + ": " + author.getName() + " " + author.getSurname());
@@ -153,6 +152,7 @@ public class Author {
             System.out.println("No author found with id: " + id);
         }
     }
+
     public void update() {
         String query = "UPDATE `authors` SET `name`= ? ,`surname`= ? WHERE id = ?";
         try {
