@@ -84,21 +84,22 @@ public class Author {
     public static void addAuthor(Scanner sc) {
         Author author = new Author();
         System.out.println("Enter author name.");
-        author.setName(sc.nextLine());
+        sc.nextLine();
+        String name = sc.nextLine();
         System.out.println("Enter author surname.");
-        author.setSurname(sc.nextLine());
-        create(author);
+        String surname = sc.nextLine();
+        author.create(name,surname);
         System.out.println("Author was added to the list.");
     }
 
-    public static void create(Author author) {
+    public static void create(String name, String surname) {
 
         String query = "INSERT INTO `authors`(`name`, `surname`) VALUES (?, ?)";
         try {
             Connection con = Main.connect();
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setString(1, author.getName());
-            pst.setString(2, author.getSurname());
+            pst.setString(1, name);
+            pst.setString(2, surname);
             pst.executeUpdate();
             con.close();
             pst.close();

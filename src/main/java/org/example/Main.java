@@ -27,7 +27,6 @@ public class Main {
                     System.exit(1);
                     break;
             }
-            break;
         }
     }
 
@@ -73,7 +72,7 @@ public class Main {
                     Book.printBookById(sc);
                     break;
                 case 3:
-
+                    Book.addBook(sc);
                     break;
                 case 4:
 
