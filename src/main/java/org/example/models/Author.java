@@ -127,7 +127,7 @@ public class Author {
             con.close();
             pst.close();
         } catch (Exception e) {
-            System.out.println("Failed to retrieve author!");
+            System.out.println("Failed to delete author!");
         }
     }
 
