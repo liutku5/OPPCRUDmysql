@@ -18,7 +18,7 @@ public class Main {
             while (true) {
                 switch (author) {
                     case 1:
-                        System.out.println(Author.selectAll());
+                        Author.printAuthor();
                         break;
                     case 2:
                         Author.printAuthorById(sc);

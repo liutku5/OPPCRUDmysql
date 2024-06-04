@@ -22,7 +22,14 @@ public class Author {
         this.name = name;
         this.surname = surname;
     }
+    public static void printAuthor() {
 
+        for (Author author : selectAll()) {
+
+            System.out.print(author);
+            System.out.println();
+        }
+    }
     public static ArrayList<Author> selectAll() {
         ArrayList<Author> authors = new ArrayList<>();
         String query = "SELECT * FROM authors ";
@@ -109,6 +116,7 @@ public class Author {
         long id = ValidateInput.longVal(sc);
         sc.nextLine();
         Author author = findById(id);
+//        reikia patikrin ar yra knygu priskirti
         if (author != null) {
             delete(id);
             System.out.println("The author with id " + id + " was removed.");
@@ -138,10 +146,10 @@ public class Author {
         Author author = findById(id);
         if (author != null) {
             System.out.println("Enter new author name.");
-            String name = sc.nextLine();
+            author.setName(sc.nextLine());
             System.out.println("Enter new author surname.");
-            String surname = sc.nextLine();
-            author = update(id, name, surname);
+            author.setSurname(sc.nextLine());
+            author.update();
             if (author != null) {
                 System.out.println("The author was changed successfully.");
             } else {
@@ -151,23 +159,20 @@ public class Author {
             System.out.println("No author found with id: " + id);
         }
     }
-    public static Author update(long id, String name, String surname) {
+    public void update() {
         String query = "UPDATE `authors` SET `name`= ? ,`surname`= ? WHERE id = ?";
-        Author author = null;
         try {
             Connection con = Main.connect();
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setString(1, name);
-            pst.setString(2, surname);
-            pst.setLong(3, id);
+            pst.setString(1, this.name);
+            pst.setString(2, this.surname);
+            pst.setLong(3, this.id);
             pst.executeUpdate();
             con.close();
             pst.close();
-            author = findById(id);
         } catch (Exception e) {
             System.out.println("Failed to update authors!");
         }
-        return author;
     }
 
     public long getId() {
@@ -222,9 +227,7 @@ public class Author {
 
     @Override
     public String toString() {
-        return "Author: " +
-                "id: " + id +
-                ", name: " + name +
-                ", surname: " + surname;
+        return id + "." + " Name: " + name + " Surname: " + surname + ";";
+
     }
 }
