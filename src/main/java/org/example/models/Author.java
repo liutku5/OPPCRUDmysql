@@ -22,12 +22,14 @@ public class Author {
         this.name = name;
         this.surname = surname;
     }
+
     public static void printAuthor() {
         for (Author author : selectAll()) {
             System.out.print(author);
             System.out.println();
         }
     }
+
     public static ArrayList<Author> selectAll() {
         ArrayList<Author> authors = new ArrayList<>();
         String query = "SELECT * FROM authors ";
@@ -55,13 +57,26 @@ public class Author {
         Author author = findById(id);
         if (author != null) {
             System.out.println("Author with id " + id + ": " + author.getName() + " " + author.getSurname());
+            System.out.println("Do you want to se the books written by this author?");
+            String response = sc.nextLine();
+            if(response.equalsIgnoreCase("yes")){
+                ArrayList<Book> books = Book.findBookByAuthorId(id);
+                if (!books.isEmpty()) {
+                    System.out.println("Books written by " + author.getName() + " " + author.getSurname() + ":");
+                    System.out.println();
+                    for (Book book : books) {
+                        System.out.println(book.getTitle() + " genre: " + book.getGenre());
+                    }
+                }else {
+                    System.out.println("No books were fond.");
+                }
+            }
         } else {
             System.out.println("No author found with id: " + id);
         }
     }
 
     public static Author findById(long id) {
-
         String query = "SELECT * FROM authors where id = ?";
         Author aut = null;
         try {
@@ -80,6 +95,47 @@ public class Author {
         }
         return aut;
     }
+    public static void printAuthorByNameSur(Scanner sc) {
+        System.out.println("Enter the name and surname of the author.");
+        String fullName = sc.nextLine();
+        sc.nextLine();
+        String[] parts = fullName.split(" ");
+        String name = parts[0];
+        String surname = "";
+        if (parts.length > 1) {
+            surname = parts[1];
+        }
+
+        ArrayList<Author> authors = findByNameSurname(name, surname);
+        if (!authors.isEmpty()) {
+            for (Author author : authors) {
+                System.out.println("Author: " + author.getName() + " " + author.getSurname());
+            }
+        } else {
+            System.out.println("No author found with name: " + name + " and surname: " + surname);
+        }
+    }
+
+    public static ArrayList<Author> findByNameSurname(String name, String surname) {
+        ArrayList<Author> authors = new ArrayList<>();
+        String query = "SELECT id, name, surname FROM authors WHERE concat(name, surname) like ? ";
+        try {
+            Connection con = Main.connect();
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, "%" + name + "%" + " " + "%" + surname + "%");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Author aut = new Author(rs.getLong("id"), rs.getString("name"), rs.getString("surname"));
+                authors.add(aut);
+            }
+            con.close();
+            pst.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Failed to find author");
+        }
+        return authors;
+    }
 
     public static void addAuthor(Scanner sc) {
         Author author = new Author();
@@ -88,7 +144,7 @@ public class Author {
         String name = sc.nextLine();
         System.out.println("Enter author surname.");
         String surname = sc.nextLine();
-        author.create(name,surname);
+        author.create(name, surname);
         System.out.println("Author was added to the list.");
     }
 
@@ -107,6 +163,7 @@ public class Author {
             System.out.println("Failed to ad author to the list!");
         }
     }
+
     public static void removeAuthor(Scanner sc) {
         System.out.println("Enter the id of the author you wish to remove.");
         long id = ValidateInput.longVal(sc);
@@ -128,8 +185,6 @@ public class Author {
             System.out.println("No author found with id: " + id);
         }
     }
-
-
 
 
     public static void delete(long id) {

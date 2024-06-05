@@ -65,7 +65,7 @@ public class Book {
         }
     }
 
-    //      Title sumaišyta su genre.
+
     public static Book findBookById(long id) {
 
         String query = "SELECT * FROM books where id = ?";
@@ -217,6 +217,17 @@ public class Book {
             System.out.println("Failed to delete book!");
         }
     }
+    public static void printBookByAuthorId(Scanner sc) {
+        long id = Book.ValidateInput.longVal(sc);
+        sc.nextLine();
+        Book book = findBookById(id);
+        if (book != null) {
+            System.out.println("Title: " + book.getTitle() + " Genre: " + book.getGenre());
+        } else {
+            System.out.println("No book were find");
+        }
+    }
+
     public static ArrayList<Book> findBookByAuthorId(long id) {
         ArrayList<Book> books = new ArrayList<>();
         String query = "SELECT * FROM books WHERE author_id =?";

@@ -24,6 +24,9 @@ public class Main {
                     bookMenu();
                     break;
                 case 3:
+                    Author.printAuthorByNameSur(sc);
+                    break;
+                case 4:
                     System.exit(1);
                     break;
             }
@@ -123,6 +126,8 @@ public class Main {
         System.out.println("--------------------------");
         System.out.println("1. Authors");
         System.out.println("2. Books");
+        System.out.println("3. Close program.");
+
         System.out.println("--------------------------");
     }
 
