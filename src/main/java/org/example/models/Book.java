@@ -19,10 +19,10 @@ public class Book {
 
     }
 
-    public Book(long id, String genre, String title, long author_id) {
+    public Book(long id, String title, String genre, long author_id) {
         this.id = id;
-        this.genre = genre;
         this.title = title;
+        this.genre = genre;
         this.author_id = author_id;
     }
 
@@ -217,6 +217,27 @@ public class Book {
             System.out.println("Failed to delete book!");
         }
     }
+    public static ArrayList<Book> findBookByAuthorId(long id) {
+        ArrayList<Book> books = new ArrayList<>();
+        String query = "SELECT * FROM books WHERE author_id =?";
+        try {
+            Connection con = Main.connect();
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setLong(1, id);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Book book = new Book(rs.getLong("id"), rs.getString("title"), rs.getString("genre"), rs.getLong("author_id"));
+                books.add(book);
+            }
+            con.close();
+            pst.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Failed to retrieve books!");
+        }
+        return books;
+    }
+
 
 
     public long getId() {

@@ -107,21 +107,30 @@ public class Author {
             System.out.println("Failed to ad author to the list!");
         }
     }
-
-
     public static void removeAuthor(Scanner sc) {
         System.out.println("Enter the id of the author you wish to remove.");
         long id = ValidateInput.longVal(sc);
         sc.nextLine();
         Author author = findById(id);
-//        reikia patikrin ar yra knygu priskirti
         if (author != null) {
-            delete(id);
-            System.out.println("The author with id " + id + " was removed.");
+            ArrayList<Book> books = Book.findBookByAuthorId(id);
+            if (!books.isEmpty()) {
+                System.out.println("The author has written the following books:");
+                for (Book book : books) {
+                    System.out.println("Title: " + book.getTitle());
+                }
+                System.out.println("Please remove books before removing the author.");
+            } else {
+                delete(id);
+                System.out.println("The author with id " + id + " was removed.");
+            }
         } else {
             System.out.println("No author found with id: " + id);
         }
     }
+
+
+
 
     public static void delete(long id) {
         String query = "DELETE FROM `authors` WHERE id = ?";
