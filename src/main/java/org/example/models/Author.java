@@ -98,31 +98,27 @@ public class Author {
 
     public static void printAuthorByNameSur(Scanner sc) {
         System.out.println("Enter the name and surname of the author.");
-        String fullName = sc.nextLine();
+        String searchAut = sc.nextLine();
         sc.nextLine();
-        String[] parts = fullName.split(" ");
-        String name = parts[0];
-        String surname = "";
-        if (parts.length > 1) {
-            surname = parts[1];
-        }
-        ArrayList<Author> authors = findByNameSurname(name, surname);
+        ArrayList<Author> authors = findByNameSurname(searchAut);
         if (!authors.isEmpty()) {
             for (Author author : authors) {
-                System.out.println("Author: " + author.getName() + " " + author.getSurname());
+                System.out.print("Id: " + author.getId() + " " + author.getName() + " " +  author.getSurname());
+                System.out.println();
             }
         } else {
-            System.out.println("No author found with name: " + name + " and surname: " + surname);
+            System.out.println("No author found.");
         }
     }
 
-    public static ArrayList<Author> findByNameSurname(String name, String surname) {
+    public static ArrayList<Author> findByNameSurname(String searchAut) {
         ArrayList<Author> authors = new ArrayList<>();
-        String query = "SELECT id, name, surname FROM authors WHERE concat(name, surname) like ? ";
+        String query = "SELECT id, name, surname FROM authors WHERE concat(name,' ', surname) like ? OR concat(surname, ' ', name) like ? ";
         try {
             Connection con = Main.connect();
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setString(1, "%" + name + "%" + " " + "%" + surname + "%");
+            pst.setString(1, "%" + searchAut + "%");
+            pst.setString(2, "%" + searchAut + "%");
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 Author aut = new Author(rs.getLong("id"), rs.getString("name"), rs.getString("surname"));

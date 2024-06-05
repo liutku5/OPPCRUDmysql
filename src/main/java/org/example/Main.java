@@ -61,8 +61,8 @@ public class Main {
     }
 
     public static void authorsSubMenu() {
-        boolean bookSubM = true;
-        while (bookSubM) {
+        boolean authorSubM = true;
+        while (authorSubM) {
             printAuthorSubMenu();
             switch (sc.nextInt()) {
                 case 1:
@@ -72,7 +72,7 @@ public class Main {
                     Author.printAuthorByNameSur(sc);
                     break;
                 case 3:
-                    bookSubM = false;
+                    authorSubM = false;
                     break;
                 case 4:
                     System.exit(1);
@@ -90,7 +90,7 @@ public class Main {
                     Book.printBook();
                     break;
                 case 2:
-                    Book.printBookById(sc);
+                    booksSubMenu();
                     break;
                 case 3:
                     Book.addBook(sc);
@@ -111,6 +111,27 @@ public class Main {
         }
     }
 
+    public static void booksSubMenu() {
+        boolean bookSubM = true;
+        while (bookSubM) {
+            printBookSubMenu();
+            switch (sc.nextInt()) {
+                case 1:
+                    Book.printBookById(sc);
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+                    bookSubM = false;
+                    break;
+                case 4:
+                    System.exit(1);
+                    break;
+            }
+        }
+    }
+
     public static void printMeniuInfo() {
         System.out.println();
         System.out.println("--------------------------");
@@ -125,7 +146,7 @@ public class Main {
         System.out.println();
         System.out.println("--------------------------");
         System.out.println("1. Show author list.");
-        System.out.println("2. Search author.");
+        System.out.println("2. Search for a author.");
         System.out.println("3. Add author to the list.");
         System.out.println("4. Edit author information.");
         System.out.println("5. Remove author from the list.");
@@ -150,12 +171,22 @@ public class Main {
         System.out.println();
         System.out.println("--------------------------");
         System.out.println("1. Show book list.");
-        System.out.println("2. Choose book by id.");
+        System.out.println("2. Search for a book.");
         System.out.println("3. Add book to the list.");
         System.out.println("4. Edit book information.");
         System.out.println("5. Remove book from the list.");
         System.out.println("6. Back to main menu.");
         System.out.println("7. Close program.");
+        System.out.println("--------------------------");
+        System.out.println();
+    }
+    public static void printBookSubMenu() {
+        System.out.println();
+        System.out.println("--------------------------");
+        System.out.println("1. Search book by id.");
+        System.out.println("2. Search book by title and genre.");
+        System.out.println("3. Back to book menu.");
+        System.out.println("4. Close program.");
         System.out.println("--------------------------");
         System.out.println();
     }
