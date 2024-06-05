@@ -57,9 +57,9 @@ public class Author {
         Author author = findById(id);
         if (author != null) {
             System.out.println("Author with id " + id + ": " + author.getName() + " " + author.getSurname());
-            System.out.println("Do you want to se the books written by this author?");
+            System.out.println("Do you want to se the books written by this author? (yes/no)");
             String response = sc.nextLine();
-            if(response.equalsIgnoreCase("yes")){
+            if (response.equalsIgnoreCase("yes")) {
                 ArrayList<Book> books = Book.findBookByAuthorId(id);
                 if (!books.isEmpty()) {
                     System.out.println("Books written by " + author.getName() + " " + author.getSurname() + ":");
@@ -67,7 +67,7 @@ public class Author {
                     for (Book book : books) {
                         System.out.println(book.getTitle() + " genre: " + book.getGenre());
                     }
-                }else {
+                } else {
                     System.out.println("No books were fond.");
                 }
             }
@@ -95,6 +95,7 @@ public class Author {
         }
         return aut;
     }
+
     public static void printAuthorByNameSur(Scanner sc) {
         System.out.println("Enter the name and surname of the author.");
         String fullName = sc.nextLine();
@@ -105,7 +106,6 @@ public class Author {
         if (parts.length > 1) {
             surname = parts[1];
         }
-
         ArrayList<Author> authors = findByNameSurname(name, surname);
         if (!authors.isEmpty()) {
             for (Author author : authors) {

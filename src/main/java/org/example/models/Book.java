@@ -65,7 +65,6 @@ public class Book {
         }
     }
 
-
     public static Book findBookById(long id) {
 
         String query = "SELECT * FROM books where id = ?";
@@ -217,6 +216,7 @@ public class Book {
             System.out.println("Failed to delete book!");
         }
     }
+
     public static void printBookByAuthorId(Scanner sc) {
         long id = Book.ValidateInput.longVal(sc);
         sc.nextLine();
@@ -248,7 +248,6 @@ public class Book {
         }
         return books;
     }
-
 
 
     public long getId() {
