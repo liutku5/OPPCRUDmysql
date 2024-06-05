@@ -100,6 +100,7 @@ public class Book {
         }
     }
 
+
     public static ArrayList<Book> findByTitleGenre(String searchBook) {
         ArrayList<Book> books = new ArrayList<>();
         String query = "SELECT * FROM `books` WHERE title like ? UNION SELECT * FROM `books` WHERE genre like ? ";
