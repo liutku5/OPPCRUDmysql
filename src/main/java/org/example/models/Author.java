@@ -13,7 +13,6 @@ public class Author {
     private long id;
     private String name;
     private String surname;
-
     public Author() {
     }
 
@@ -99,7 +98,6 @@ public class Author {
     public static void printAuthorByNameSur(Scanner sc) {
         System.out.println("Enter the name and surname of the author.");
         String searchAut = sc.nextLine();
-        sc.nextLine();
         ArrayList<Author> authors = findByNameSurname(searchAut);
         if (!authors.isEmpty()) {
             for (Author author : authors) {
@@ -113,7 +111,7 @@ public class Author {
 
     public static ArrayList<Author> findByNameSurname(String searchAut) {
         ArrayList<Author> authors = new ArrayList<>();
-        String query = "SELECT id, name, surname FROM authors WHERE concat(name,' ', surname) like ? OR concat(surname, ' ', name) like ? ";
+            String query = "SELECT id, name, surname FROM authors WHERE concat(name,' ', surname) like ? OR concat(surname, ' ', name) like ? ";
         try {
             Connection con = Main.connect();
             PreparedStatement pst = con.prepareStatement(query);

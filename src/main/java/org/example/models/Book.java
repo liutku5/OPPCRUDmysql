@@ -86,6 +86,43 @@ public class Book {
         return book;
     }
 
+    public static void printBookByTitleGenre(Scanner sc) {
+        System.out.println("Enter the book your looking for.");
+        String searchBook = sc.nextLine();
+        ArrayList<Book> books = findByTitleGenre(searchBook);
+        if (!books.isEmpty()) {
+            for (Book book : books) {
+                System.out.print(book.getId() + " title: " + book.getTitle() + " genre: " + book.getGenre() );
+                System.out.println();
+            }
+        } else {
+            System.out.println("No book found.");
+        }
+    }
+
+    public static ArrayList<Book> findByTitleGenre(String searchBook) {
+        ArrayList<Book> books = new ArrayList<>();
+        String query = "SELECT * FROM `books` WHERE title like ? UNION SELECT * FROM `books` WHERE genre like ? ";
+        try {
+            Connection con = Main.connect();
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, "%" + searchBook + "%");
+            pst.setString(2, "%" + searchBook + "%");
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Book bo = new Book(rs.getLong("id"), rs.getString("title"), rs.getString("genre"), rs.getLong("auther_id"));
+                books.add(bo);
+            }
+            con.close();
+            pst.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Failed to find book");
+        }
+        return books;
+    }
+
+
     public static void addBook(Scanner sc) {
         Book book = new Book();
         System.out.println("Enter book title.");

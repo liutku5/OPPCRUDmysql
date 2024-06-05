@@ -16,7 +16,9 @@ public class Main {
         sc = new Scanner(System.in);
         while (true) {
             printMeniuInfo();
-            switch (sc.nextInt()) {
+            int option = sc.nextInt();
+            sc.nextLine();
+            switch (option) {
                 case 1:
                     authorMenu();
                     break;
@@ -34,7 +36,9 @@ public class Main {
         boolean authorM = true;
         while (authorM) {
             printAuthorMeniuInfo();
-            switch (sc.nextInt()) {
+            int option = sc.nextInt();
+            sc.nextLine();
+            switch (option) {
                 case 1:
                     Author.printAuthor();
                     break;
@@ -64,7 +68,9 @@ public class Main {
         boolean authorSubM = true;
         while (authorSubM) {
             printAuthorSubMenu();
-            switch (sc.nextInt()) {
+            int option = sc.nextInt();
+            sc.nextLine();
+            switch (option) {
                 case 1:
                     Author.printAuthorById(sc);
                     break;
@@ -85,7 +91,9 @@ public class Main {
         boolean bookM = true;
         while (bookM) {
             printBookMeniuInfo();
-            switch (sc.nextInt()) {
+            int option = sc.nextInt();
+            sc.nextLine();
+            switch (option) {
                 case 1:
                     Book.printBook();
                     break;
@@ -115,12 +123,14 @@ public class Main {
         boolean bookSubM = true;
         while (bookSubM) {
             printBookSubMenu();
-            switch (sc.nextInt()) {
+            int option = sc.nextInt();
+            sc.nextLine();
+            switch (option) {
                 case 1:
                     Book.printBookById(sc);
                     break;
                 case 2:
-
+                    Book.printBookByTitleGenre(sc);
                     break;
                 case 3:
                     bookSubM = false;
@@ -146,7 +156,7 @@ public class Main {
         System.out.println();
         System.out.println("--------------------------");
         System.out.println("1. Show author list.");
-        System.out.println("2. Search for a author.");
+        System.out.println("2. Search for an author.");
         System.out.println("3. Add author to the list.");
         System.out.println("4. Edit author information.");
         System.out.println("5. Remove author from the list.");
@@ -171,7 +181,7 @@ public class Main {
         System.out.println();
         System.out.println("--------------------------");
         System.out.println("1. Show book list.");
-        System.out.println("2. Search for a book.");
+        System.out.println("2. Search for an book.");
         System.out.println("3. Add book to the list.");
         System.out.println("4. Edit book information.");
         System.out.println("5. Remove book from the list.");
